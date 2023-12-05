@@ -20,9 +20,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 //builder.Services.AddScoped<ICategoryService, CategoryService>();ApplicationDbContext
+builder.Services.AddSwaggerGen(c =>
+{
+    // ... езогогй цняЛ
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+});
 
 
 builder.Services.AddScoped<IClientRepository1, ClientRepository>();

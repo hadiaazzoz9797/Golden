@@ -61,6 +61,7 @@ namespace Golden.Service
         public async Task CreateAsync(ResponsibleModel model)
         {
             
+
             var cat = new Responsible()
             {
                 Name = model.Name,
