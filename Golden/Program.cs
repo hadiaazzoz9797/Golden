@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,22 +20,33 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 //builder.Services.AddScoped<ICategoryService, CategoryService>();ApplicationDbContext
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(KeyByte),
-        };
-    });
+builder.Services.AddSwaggerGen(c =>
+{
+    // ... ≈⁄œ«œ«  √Œ—Ï
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+});
 
+
+builder.Services.AddScoped<IClientRepository1, ClientRepository>();
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IResponsibleRepository, ResponsibleRepository>();
+builder.Services.AddScoped<IResponsibleService, ResponsibleService>();
+//add authentication setting
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(x =>
+                {
+                    x.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                    };
+                });
 //builder.Services.AddSwaggerGen(c =>
 //{
 //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
@@ -71,11 +83,14 @@ var SiteUrl = builder.Configuration["SiteUrl"];
 //    {
 //        // Configure the options for your authentication handler
 //    });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminAcess", policy => policy.RequireRole("Admin"));
+    //options.AddPolicy("CustomerAcess", policy => policy.RequireRole("Customer"));
 
-builder.Services.AddScoped<IClientRepository1,ClientRepository>();
-builder.Services.AddScoped<IClientService,ClientService>();
-builder.Services.AddScoped<ISuperVisorRepository, SuperVisorRepository>();
-builder.Services.AddScoped<ISuperVisorService, SuperVisorService>();
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -112,8 +127,7 @@ if (!app.Environment.IsProduction())
             {
                 UserName = "SuperAdmin@gmail.com",
                 Password = "Admin123",
-
-
+                 Role= "Admin",
             };
             db.admin.Add(item);
             db.SaveChanges();

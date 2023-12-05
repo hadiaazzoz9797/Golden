@@ -5,33 +5,36 @@ using Golden.Repository.IRepository;
 
 namespace Golden.Service
 {
-    public class SuperVisorService : ISuperVisorService
+    public class ResponsibleService : IResponsibleService
     {
 
         private IConfiguration Configuration;
-        private readonly ISuperVisorRepository _SperVisorRepository;
+        private readonly IResponsibleRepository _SperVisorRepository;
+        
 
-        public SuperVisorService(ISuperVisorRepository sperVisorRepository)
+        public ResponsibleService(IResponsibleRepository sperVisorRepository)
         {
             _SperVisorRepository = sperVisorRepository;
         }
 
 
-        public async Task<List<SuperVisorDto>> GetAllAsync()
+        public async Task<List<ResponsibleDto>> GetAllAsync()
         {
 
             var SuperVisors = await _SperVisorRepository.GetAllAsync();
             if (SuperVisors == null)
                 throw new Exception("No item Found");
 
-            var superVisors = new List<SuperVisorDto>();
+            var superVisors = new List<ResponsibleDto>();
 
             foreach (var SuperVisor in SuperVisors)
             {
-                var cat = new SuperVisorDto()
+                var cat = new ResponsibleDto()
                 {
-                    SuperVisorId = SuperVisor.SuperVisorId,
+                    ResponsibleId = SuperVisor.ResponsibleId,
                     Name = SuperVisor.Name,
+                    Type = SuperVisor.Type,
+
 
                 };
 
@@ -43,25 +46,27 @@ namespace Golden.Service
 
         }
 
-        public async Task<SuperVisorDto> Get(int id)
+        public async Task<ResponsibleDto> Get(int id)
         {
             var supervisor = _SperVisorRepository.Get(id); // Assuming _SperVisorRepository.Get returns a Task<SuperVisor> or similar
-            var item = new SuperVisorDto()
+            var item = new ResponsibleDto()
             {
                 Name = supervisor.Name,
-                SuperVisorId = supervisor.SuperVisorId,
+                ResponsibleId = supervisor.ResponsibleId,
+                Type = supervisor.Type,
             };
             return item;
         }
 
-        public async Task CreateAsync(SuperVisorModel model)
+        public async Task CreateAsync(ResponsibleModel model)
         {
+            
 
-
-            var cat = new Supervisor()
+            var cat = new Responsible()
             {
                 Name = model.Name,
-
+                Type =(int)model.Type
+,
             };
 
             var newId = await _SperVisorRepository.CreateAsync(cat);
@@ -70,7 +75,7 @@ namespace Golden.Service
 
 
         }
-        public async Task Update(int id, SuperVisorUpdate model)
+        public async Task Update(int id, ResponsibleUpdate model)
         {
             var supervisor = _SperVisorRepository.Get(id);
             if (supervisor == null)
@@ -80,6 +85,7 @@ namespace Golden.Service
             {
                 supervisor.Name = model.Name;
             }
+
             // التحقق من القيم المستلمة وتحديث الخصائص الصحيحة
 
 

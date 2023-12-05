@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Golden.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231203072102_database")]
-    partial class database
+    [Migration("20231205125044_datbase4")]
+    partial class datbase4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,10 @@ namespace Golden.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminId"), 1L, 1);
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -99,7 +103,6 @@ namespace Golden.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Token")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Verified")
@@ -111,23 +114,6 @@ namespace Golden.Migrations
                     b.HasKey("ClientId");
 
                     b.ToTable("clients");
-                });
-
-            modelBuilder.Entity("Golden.Entities.Contractor", b =>
-                {
-                    b.Property<int>("ContractorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContractorId"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ContractorId");
-
-                    b.ToTable("contractors");
                 });
 
             modelBuilder.Entity("Golden.Entities.Details", b =>
@@ -213,29 +199,6 @@ namespace Golden.Migrations
                     b.ToTable("orders");
                 });
 
-            modelBuilder.Entity("Golden.Entities.ProContractor", b =>
-                {
-                    b.Property<int>("ProContractorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProContractorId"), 1L, 1);
-
-                    b.Property<int>("ContractorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProContractorId");
-
-                    b.HasIndex("ContractorId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("procontractors");
-                });
-
             modelBuilder.Entity("Golden.Entities.Project", b =>
                 {
                     b.Property<int>("ProjectId")
@@ -244,17 +207,10 @@ namespace Golden.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"), 1L, 1);
 
-                    b.Property<string>("CompletionPercentage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProContractorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProSuperId")
+                    b.Property<int>("ProResponsibleId")
                         .HasColumnType("int");
 
                     b.HasKey("ProjectId");
@@ -264,27 +220,47 @@ namespace Golden.Migrations
                     b.ToTable("projects");
                 });
 
-            modelBuilder.Entity("Golden.Entities.ProSuper", b =>
+            modelBuilder.Entity("Golden.Entities.ProResponsible", b =>
                 {
-                    b.Property<int>("ProSuperId")
+                    b.Property<int>("ProResponsibleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProSuperId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProResponsibleId"), 1L, 1);
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SuperVisorId")
+                    b.Property<int>("ResponsibleId")
                         .HasColumnType("int");
 
-                    b.HasKey("ProSuperId");
+                    b.HasKey("ProResponsibleId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("SuperVisorId");
+                    b.HasIndex("ResponsibleId");
 
-                    b.ToTable("proSupers");
+                    b.ToTable("proResponsible");
+                });
+
+            modelBuilder.Entity("Golden.Entities.Responsible", b =>
+                {
+                    b.Property<int>("ResponsibleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResponsibleId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("ResponsibleId");
+
+                    b.ToTable("Responsible");
                 });
 
             modelBuilder.Entity("Golden.Entities.Services", b =>
@@ -315,23 +291,6 @@ namespace Golden.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("services");
-                });
-
-            modelBuilder.Entity("Golden.Entities.Supervisor", b =>
-                {
-                    b.Property<int>("SuperVisorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SuperVisorId"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SuperVisorId");
-
-                    b.ToTable("supervisors");
                 });
 
             modelBuilder.Entity("Golden.Entities.Appointment", b =>
@@ -378,23 +337,6 @@ namespace Golden.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Golden.Entities.ProContractor", b =>
-                {
-                    b.HasOne("Golden.Entities.Contractor", null)
-                        .WithMany("proContractors")
-                        .HasForeignKey("ContractorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Golden.Entities.Project", "Project")
-                        .WithMany("ProContractor")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("Golden.Entities.Project", b =>
                 {
                     b.HasOne("Golden.Entities.Order", "Order")
@@ -406,17 +348,17 @@ namespace Golden.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Golden.Entities.ProSuper", b =>
+            modelBuilder.Entity("Golden.Entities.ProResponsible", b =>
                 {
                     b.HasOne("Golden.Entities.Project", "Project")
-                        .WithMany("ProSuper")
+                        .WithMany("ProResponsible")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Golden.Entities.Supervisor", null)
-                        .WithMany("proSupers")
-                        .HasForeignKey("SuperVisorId")
+                    b.HasOne("Golden.Entities.Responsible", null)
+                        .WithMany("proResponsibles")
+                        .HasForeignKey("ResponsibleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -441,11 +383,6 @@ namespace Golden.Migrations
                     b.Navigation("orders");
                 });
 
-            modelBuilder.Entity("Golden.Entities.Contractor", b =>
-                {
-                    b.Navigation("proContractors");
-                });
-
             modelBuilder.Entity("Golden.Entities.Order", b =>
                 {
                     b.Navigation("projects");
@@ -455,21 +392,19 @@ namespace Golden.Migrations
 
             modelBuilder.Entity("Golden.Entities.Project", b =>
                 {
-                    b.Navigation("ProContractor");
-
-                    b.Navigation("ProSuper");
+                    b.Navigation("ProResponsible");
 
                     b.Navigation("images");
+                });
+
+            modelBuilder.Entity("Golden.Entities.Responsible", b =>
+                {
+                    b.Navigation("proResponsibles");
                 });
 
             modelBuilder.Entity("Golden.Entities.Services", b =>
                 {
                     b.Navigation("Details");
-                });
-
-            modelBuilder.Entity("Golden.Entities.Supervisor", b =>
-                {
-                    b.Navigation("proSupers");
                 });
 #pragma warning restore 612, 618
         }

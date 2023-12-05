@@ -13,8 +13,8 @@ using static Golden.Model.ClientLoginModel;
 
 namespace Golden.Controllers.Web
 {
-    [Route("api/Web/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/Web/[controller]/[Action]")]
+   
     [ApiController]
     public class ClientController : ControllerBase
     {
@@ -31,7 +31,7 @@ namespace Golden.Controllers.Web
 
         }
         [HttpPost]
-        [AllowAnonymous]
+
         public IActionResult Login(LoginModel model)
         {
 
@@ -49,7 +49,7 @@ namespace Golden.Controllers.Web
             var obj1 = _db.clients.FirstOrDefault(u => u.Password == model.Password && u.Email == model.Email); ;
             if (obj1 == null)
                 return BadRequest("wrong password!");
-          
+
             var AccessToken = GenerateAccessToken(obj1.ClientId);
             obj1.Token = AccessToken;
 
@@ -83,89 +83,83 @@ namespace Golden.Controllers.Web
         //    return Ok("User-Vertified");
 
         //}
-        ////[AllowAnonymous]
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-       
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> Register([FromForm] RegisterModel obj)
-        //{
+
+        [HttpPost]
+
+        public async Task<IActionResult> Register([FromForm] RegisterModel obj)
+        {
 
 
-        //    if (_db.clients.Any(u => u.Email == obj.Email))
-        //    {
-        //        return BadRequest("Email is already exist");
-        //    }
-        //    var rand = new Random();
+            if (_db.clients.Any(u => u.Email == obj.Email))
+            {
+                return BadRequest("Email is already exist");
+            }
+            var rand = new Random();
 
-        //    var client = new Client()
-        //    {
-        //        ClientName = obj.ClientName,
-        //        Email = obj.Email,
-        //        Password = obj.Password,
-        //        PhoneNumber = obj.PhoneNumber,
+            var client = new Client()
+            {
+                ClientName = obj.ClientName,
+                Email = obj.Email,
+                Password = obj.Password,
+                PhoneNumber = obj.PhoneNumber,
 
-        //        //VertificationToken = CreateRandomToken(),
+                //VertificationToken = CreateRandomToken(),
 
 
-        //    };
+            };
 
-        //    _db.clients.Add(client);
-        //    _db.SaveChanges();
+            _db.clients.Add(client);
+            _db.SaveChanges();
 
-        //    //var fileName = _mediaHelper.SaveFile(obj.Photo);
+            //var fileName = _mediaHelper.SaveFile(obj.Photo);
 
-        //    //var EncodePass = encrypt(client.VertificationToken);
-        //    //string url = "https://ros-ta-web.trendy-tech.co/" + "api/Web/User/Verfiy?" + EncodePass + "&" + user.Email;
-        //    //string body = string.Format(@"<div stye='text-align:center;'>
-        //    //<h1>Welcome Our Website</h1>
-        //    //<h3>Click Below For Verify Your Email Id </h3>
-        //    //<form method='post' Action='{0}' 
-        //    // style='display:inline;'>
-        //    // <button type='submit'
-        //    //  style='display: block;
-        //    //  text-align: centre;
-        //    //  font-weight: bold;
-        //    //  background-color: #000CBA;
-        //    //  color: #ffffff;
-        //    //  cursor: pointer;
-        //    //  width: 45%;
-        //    //  height: 0px;
-        //    //  padding: 10%;
-        //    //  border-radius: 14px;'>
-        //    //            Confirm Mail
-        //    //            </button>
-        //    //            </form>
-        //    //            </div> ", url, EncodePass, user.Email);
+            //var EncodePass = encrypt(client.VertificationToken);
+            //string url = "https://ros-ta-web.trendy-tech.co/" + "api/Web/User/Verfiy?" + EncodePass + "&" + user.Email;
+            //string body = string.Format(@"<div stye='text-align:center;'>
+            //<h1>Welcome Our Website</h1>
+            //<h3>Click Below For Verify Your Email Id </h3>
+            //<form method='post' Action='{0}' 
+            // style='display:inline;'>
+            // <button type='submit'
+            //  style='display: block;
+            //  text-align: centre;
+            //  font-weight: bold;
+            //  background-color: #000CBA;
+            //  color: #ffffff;
+            //  cursor: pointer;
+            //  width: 45%;
+            //  height: 0px;
+            //  padding: 10%;
+            //  border-radius: 14px;'>
+            //            Confirm Mail
+            //            </button>
+            //            </form>
+            //            </div> ", url, EncodePass, user.Email);
 
-        //    //var email = new MimeMessage();
-        //    //email.From.Add(MailboxAddress.Parse("resturent.ty@gmail.com"));
+            //var email = new MimeMessage();
+            //email.From.Add(MailboxAddress.Parse("resturent.ty@gmail.com"));
 
-        //    //email.To.Add(MailboxAddress.Parse(obj.Email));
-        //    //email.Subject = " Vertificated Email ";
-        //    //email.Body = new TextPart(TextFormat.Html)
-        //    //{
-        //    //    Text = body
-        //    //};
-        //    //try
-        //    //{
-        //    //    //send email
-        //    //    using var smtp = new SmtpClient();
-        //    //    smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-        //    //    smtp.Authenticate("resturent.ty@gmail.com", "rbxjaujvpwhvmqsv");
-        //    //    smtp.Send(email);
-        //    //    smtp.Disconnect(true);
-        //    //}
-        //    //catch (Exception e)
-        //    //{
-        //    //    return Ok(e);
-        //    //}
-        //    return Ok();
-        //}
+            //email.To.Add(MailboxAddress.Parse(obj.Email));
+            //email.Subject = " Vertificated Email ";
+            //email.Body = new TextPart(TextFormat.Html)
+            //{
+            //    Text = body
+            //};
+            //try
+            //{
+            //    //send email
+            //    using var smtp = new SmtpClient();
+            //    smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+            //    smtp.Authenticate("resturent.ty@gmail.com", "rbxjaujvpwhvmqsv");
+            //    smtp.Send(email);
+            //    smtp.Disconnect(true);
+            //}
+            //catch (Exception e)
+            //{
+            //    return Ok(e);
+            //}
+            return Ok();
+        }
 
         private string GenerateAccessToken(int userId)
             {
