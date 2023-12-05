@@ -2,12 +2,12 @@
 
 namespace Golden.Entities
 {
-    public class ProSuper
+    public class ProResponsible
     {
         [PrimaryKey]
         [AutoIncrement]
-        public int ProSuperId { get; set; }
-        public int SuperVisorId { get; set; }
+        public int ProResponsibleId { get; set; }
+        public int ResponsibleId { get; set; }
         public Project Project { get; set; }
 
     }

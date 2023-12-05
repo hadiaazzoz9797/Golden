@@ -7,13 +7,12 @@ namespace Golden.Entities
         [AutoIncrement]
         public int ProjectId { get; set; }
         public int OrderId { get; set; }
-        public int ProSuperId { get; set; }
-        public int ProContractorId { get; set; }
+        public int ProResponsibleId { get; set; }
+
         
 
-        public string CompletionPercentage { get; set; }
-        public List<ProContractor> ProContractor { get; set; }
-        public List<ProSuper> ProSuper { get; set; }
+
+        public List<ProResponsible> ProResponsible { get; set; }
         public List<Image> images { get; set; }
         public Order Order { get; set; }
     }

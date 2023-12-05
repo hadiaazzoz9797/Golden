@@ -46,29 +46,17 @@ namespace Golden.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "contractors",
+                name: "Responsible",
                 columns: table => new
                 {
-                    ContractorId = table.Column<int>(type: "int", nullable: false)
+                    ResponsibleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_contractors", x => x.ContractorId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "supervisors",
-                columns: table => new
-                {
-                    SuperVisorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_supervisors", x => x.SuperVisorId);
+                    table.PrimaryKey("PK_Responsible", x => x.ResponsibleId);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,9 +111,7 @@ namespace Golden.Migrations
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProSuperId = table.Column<int>(type: "int", nullable: false),
-                    ProContractorId = table.Column<int>(type: "int", nullable: false),
-                    CompletionPercentage = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProResponsibleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -181,54 +167,28 @@ namespace Golden.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "procontractors",
+                name: "proResponsible",
                 columns: table => new
                 {
-                    ProContractorId = table.Column<int>(type: "int", nullable: false)
+                    ProResponsibleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ContractorId = table.Column<int>(type: "int", nullable: false),
+                    ResponsibleId = table.Column<int>(type: "int", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_procontractors", x => x.ProContractorId);
+                    table.PrimaryKey("PK_proResponsible", x => x.ProResponsibleId);
                     table.ForeignKey(
-                        name: "FK_procontractors_contractors_ContractorId",
-                        column: x => x.ContractorId,
-                        principalTable: "contractors",
-                        principalColumn: "ContractorId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_procontractors_projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "projects",
-                        principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "proSupers",
-                columns: table => new
-                {
-                    ProSuperId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SuperVisorId = table.Column<int>(type: "int", nullable: false),
-                    ProjectId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_proSupers", x => x.ProSuperId);
-                    table.ForeignKey(
-                        name: "FK_proSupers_projects_ProjectId",
+                        name: "FK_proResponsible_projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "projects",
                         principalColumn: "ProjectId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_proSupers_supervisors_SuperVisorId",
-                        column: x => x.SuperVisorId,
-                        principalTable: "supervisors",
-                        principalColumn: "SuperVisorId",
+                        name: "FK_proResponsible_Responsible_ResponsibleId",
+                        column: x => x.ResponsibleId,
+                        principalTable: "Responsible",
+                        principalColumn: "ResponsibleId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -273,29 +233,19 @@ namespace Golden.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_procontractors_ContractorId",
-                table: "procontractors",
-                column: "ContractorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_procontractors_ProjectId",
-                table: "procontractors",
-                column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_projects_OrderId",
                 table: "projects",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_proSupers_ProjectId",
-                table: "proSupers",
+                name: "IX_proResponsible_ProjectId",
+                table: "proResponsible",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_proSupers_SuperVisorId",
-                table: "proSupers",
-                column: "SuperVisorId");
+                name: "IX_proResponsible_ResponsibleId",
+                table: "proResponsible",
+                column: "ResponsibleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_services_OrderId",
@@ -318,22 +268,16 @@ namespace Golden.Migrations
                 name: "images");
 
             migrationBuilder.DropTable(
-                name: "procontractors");
-
-            migrationBuilder.DropTable(
-                name: "proSupers");
+                name: "proResponsible");
 
             migrationBuilder.DropTable(
                 name: "services");
 
             migrationBuilder.DropTable(
-                name: "contractors");
-
-            migrationBuilder.DropTable(
                 name: "projects");
 
             migrationBuilder.DropTable(
-                name: "supervisors");
+                name: "Responsible");
 
             migrationBuilder.DropTable(
                 name: "orders");

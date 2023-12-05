@@ -5,34 +5,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Golden.Repository
 {
-    public class SuperVisorRepository : ISuperVisorRepository
+    public class ResponsibleRepository : IResponsibleRepository
     {
         private readonly ApplicationDbContext _db;
-        public SuperVisorRepository(ApplicationDbContext db)
+        public ResponsibleRepository(ApplicationDbContext db)
         {
             _db = db;
         }
-        public List<Supervisor> GetAll()
+        public List<Responsible> GetAll()
         {
 
-            return _db.supervisors.ToList();
+            return _db.Responsible.ToList();
 
         }
-        public async Task<List<Supervisor>> GetAllAsync()
+        public async Task<List<Responsible>> GetAllAsync()
         {
 
-            return await _db.supervisors.ToListAsync();
+            return await _db.Responsible.ToListAsync();
 
         }
 
-        public Supervisor Get(int id)
+        public Responsible Get(int id)
         {
-            return _db.supervisors.Find(id);
+            return _db.Responsible.Find(id);
 
         }
-        public Supervisor GetFirstOrDefault(int id)
+        public Responsible GetFirstOrDefault(int id)
         {
-            return _db.supervisors.FirstOrDefault(x => x.SuperVisorId == id);
+            return _db.Responsible.FirstOrDefault(x => x.ResponsibleId == id);
 
         }
         //public int Create(Category entity)
@@ -41,13 +41,13 @@ namespace Golden.Repository
         //    return _db.SaveChanges();
 
         //}
-        public async Task<int> CreateAsync(Supervisor entity)
+        public async Task<int> CreateAsync(Responsible entity)
         {
-            _db.supervisors.Add(entity);
+            _db.Responsible.Add(entity);
             return await _db.SaveChangesAsync();
 
         }
-        public int Update(int id, Supervisor model)
+        public int Update(int id, Responsible model)
         {
 
             var dbEntity = Get(id);
@@ -60,7 +60,7 @@ namespace Golden.Repository
         {
             var dbEntity = Get(id);
             if (dbEntity == null) { return -1; }
-            _db.supervisors.Remove(dbEntity);
+            _db.Responsible.Remove(dbEntity);
             return _db.SaveChanges();
 
         }

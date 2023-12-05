@@ -1,0 +1,23 @@
+﻿
+openapi: 3.0.0
+info:
+  title: Your API
+  version: 1.0.0
+paths:
+  /your-endpoint:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                yourAttribute:
+                  type: string
+                  enum:
+                    - "1"
+                    - "2"
+                  description: "Your attribute with options 1 or 2"
+      responses:
+        '200':
+          description: 'OK'
