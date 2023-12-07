@@ -44,4 +44,16 @@ namespace Golden.Model
         public string Name { get; set; }
         public int Type { get; set; }
     }
+    public class SuperVisorDto
+    {
+        public int SupervisorId { get; set; }
+        public string Name { get; set; }
+        
+    }
+    public class ContractorDto
+    {
+        public int ContractorId { get; set; }
+        public string Name { get; set; }
+
+    }
 }

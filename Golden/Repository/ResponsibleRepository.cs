@@ -30,6 +30,11 @@ namespace Golden.Repository
             return _db.Responsible.Find(id);
 
         }
+        public List<Responsible> GetType(int type)
+        {
+            return _db.Responsible.Where(x=>x.Type== type).ToList();
+
+        }
         public Responsible GetFirstOrDefault(int id)
         {
             return _db.Responsible.FirstOrDefault(x => x.ResponsibleId == id);

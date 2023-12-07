@@ -48,16 +48,49 @@ namespace Golden.Service
 
         public async Task<ResponsibleDto> Get(int id)
         {
-            var supervisor = _SperVisorRepository.Get(id); // Assuming _SperVisorRepository.Get returns a Task<SuperVisor> or similar
+            var responsible = _SperVisorRepository.Get(id); // Assuming _SperVisorRepository.Get returns a Task<SuperVisor> or similar
             var item = new ResponsibleDto()
             {
-                Name = supervisor.Name,
-                ResponsibleId = supervisor.ResponsibleId,
-                Type = supervisor.Type,
+                Name =responsible.Name,
+                ResponsibleId = responsible.ResponsibleId,
+                Type = responsible.Type,
             };
             return item;
         }
+        public async Task<List<SuperVisorDto>> GetSupervisor(int type)
+        {
+            var supervisor = _SperVisorRepository.GetType(type); // Assuming _SperVisorRepository.Get returns a Task<SuperVisor> or similar
+            var supervisors = new List<SuperVisorDto>();
+            foreach (var super in supervisor) 
+            {
+                var item = new SuperVisorDto()
+                {
+                    Name = super.Name,
+                    SupervisorId = super.ResponsibleId,
 
+                };
+                supervisors.Add(item);
+            }
+           
+            return supervisors;
+        }
+        public async Task<List<ContractorDto>> GetContractor(int type)
+        {
+            var supervisor = _SperVisorRepository.GetType(type); // Assuming _SperVisorRepository.Get returns a Task<SuperVisor> or similar
+            var contractors = new List<ContractorDto>();
+            foreach (var con in contractors) 
+            {
+                var item = new ContractorDto()
+                {
+                    Name = con.Name,
+                    ContractorId = con.ContractorId,
+
+                };
+                contractors.Add(item);
+            }
+
+            return contractors;
+        }
         public async Task CreateAsync(ResponsibleModel model)
         {
             

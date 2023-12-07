@@ -10,6 +10,7 @@ namespace Golden.Repository.IRepository
         Responsible Get(int id);
         List<Responsible> GetAll();
         Task<List<Responsible>> GetAllAsync();
+        List<Responsible> GetType(int type);
         Responsible GetFirstOrDefault(int id);
         int Update(int id, Responsible model);
     }

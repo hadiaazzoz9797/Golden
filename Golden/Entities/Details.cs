@@ -7,6 +7,7 @@ namespace Golden.Entities
         [AutoIncrement]
         [PrimaryKey]
         public int DetailsId { get; set; }
+        public int ServicesId { get; set; }
         public string DetailName { get; set; }
         public Services Service { get; set; }
 

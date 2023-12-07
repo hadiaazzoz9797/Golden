@@ -15,8 +15,8 @@ namespace Golden.Controllers.Admin
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(Roles = "Admin")]
 
     public class ResponsibleController:ControllerBase
     {
@@ -54,6 +54,21 @@ namespace Golden.Controllers.Admin
             var Result = _supervisorservice.Get(id);
             return Ok(Result);
         }
+        [HttpGet("{type}")]
+        //[AllowAnonymous]
+        public IActionResult GetSupervisor([FromRoute] int type)
+        {
+            var Result = _supervisorservice.GetSupervisor(type);
+            return Ok(Result);
+        }
+        [HttpGet("{type}")]
+        //[AllowAnonymous]
+        public IActionResult GetContractor([FromRoute] int type)
+        {
+            var Result = _supervisorservice.GetContractor(type);
+            return Ok(Result);
+        }
+
 
         [HttpPost]
         //[AllowAnonymous]
