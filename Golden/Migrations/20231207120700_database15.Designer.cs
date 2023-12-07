@@ -4,6 +4,7 @@ using Golden;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Golden.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231207120700_database15")]
+    partial class database15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,29 +196,6 @@ namespace Golden.Migrations
                     b.ToTable("orders");
                 });
 
-            modelBuilder.Entity("Golden.Entities.OrderDetails", b =>
-                {
-                    b.Property<int>("OrderDetailsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailsId"), 1L, 1);
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServicesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderDetailsId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ServicesId");
-
-                    b.ToTable("OrderDetails");
-                });
-
             modelBuilder.Entity("Golden.Entities.Project", b =>
                 {
                     b.Property<int>("ProjectId")
@@ -293,6 +272,9 @@ namespace Golden.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ServiceName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -302,6 +284,8 @@ namespace Golden.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ServicesId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("services");
                 });
@@ -350,25 +334,6 @@ namespace Golden.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Golden.Entities.OrderDetails", b =>
-                {
-                    b.HasOne("Golden.Entities.Order", "order")
-                        .WithMany("orderdetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Golden.Entities.Services", "Services")
-                        .WithMany("orderdetails")
-                        .HasForeignKey("ServicesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Services");
-
-                    b.Navigation("order");
-                });
-
             modelBuilder.Entity("Golden.Entities.Project", b =>
                 {
                     b.HasOne("Golden.Entities.Order", "Order")
@@ -399,6 +364,17 @@ namespace Golden.Migrations
                     b.Navigation("Responsible");
                 });
 
+            modelBuilder.Entity("Golden.Entities.Services", b =>
+                {
+                    b.HasOne("Golden.Entities.Order", "Order")
+                        .WithMany("services")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Golden.Entities.Client", b =>
                 {
                     b.Navigation("Appointment");
@@ -408,9 +384,9 @@ namespace Golden.Migrations
 
             modelBuilder.Entity("Golden.Entities.Order", b =>
                 {
-                    b.Navigation("orderdetails");
-
                     b.Navigation("projects");
+
+                    b.Navigation("services");
                 });
 
             modelBuilder.Entity("Golden.Entities.Project", b =>
@@ -428,8 +404,6 @@ namespace Golden.Migrations
             modelBuilder.Entity("Golden.Entities.Services", b =>
                 {
                     b.Navigation("Details");
-
-                    b.Navigation("orderdetails");
                 });
 #pragma warning restore 612, 618
         }

@@ -99,8 +99,10 @@ namespace Golden.Service
                 Description = model.Description,
                 ServiceName = model.ServiceName,
                 Servicetype = model.Servicetype,
+                
 
             };
+            
 
 
             //_serviceRepository.CreateAsync(cat);

@@ -8,7 +8,7 @@ namespace Golden.Entities
         [PrimaryKey]
         public int OrderId { get; set; }
         public int ClientId { get; set; }
-        public int ServiceId { get; set; }
+    
         public string Budget { get; set; }
        
         public DateTime? CreatedDate { get; set; }
@@ -17,7 +17,7 @@ namespace Golden.Entities
         public string BuildingArea { get; set; }
 
         public string Country { get; set; }
-        public List<Services> services { get; set; }
+        public List<OrderDetails> orderdetails { get; set; }
         public Client Client { get; set; }
         public List<Project> projects { get; set; }
     }

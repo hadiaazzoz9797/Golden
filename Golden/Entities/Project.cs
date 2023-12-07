@@ -9,8 +9,6 @@ namespace Golden.Entities
         public int OrderId { get; set; }
         public int ProResponsibleId { get; set; }
 
-        
-
 
         public List<ProResponsible> ProResponsible { get; set; }
         public List<Image> images { get; set; }
